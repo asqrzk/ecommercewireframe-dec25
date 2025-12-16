@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Functional Specification Document - Project Essence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-blue: #2563eb;
+            --code-bg: #1e293b;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            scroll-behavior: smooth;
+        }
+
+        /* Clean Documentation Layout - No Sidebar */
+        .doc-container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* Typography */
+        h1 { 
+            font-size: 3.5rem; 
+            font-weight: 800; 
+            color: #0f172a; 
+            margin-bottom: 0.5rem; 
+            letter-spacing: -0.03em; 
+            line-height: 1.1;
+        }
+        
+        /* Increased spacing between sections */
+        section {
+            margin-bottom: 6rem;
+        }
+
+        h2 { font-size: 1.75rem; font-weight: 600; color: #1e293b; margin-top: 1rem; margin-bottom: 1.5rem; border-bottom: 1px solid #e2e8f0; padding-bottom: 0.5rem; }
+        h3 { font-size: 1.25rem; font-weight: 600; color: #334155; margin-top: 2rem; margin-bottom: 1rem; }
+        p { line-height: 1.7; margin-bottom: 1rem; }
+        
+        /* Requirement Tags */
+        .req-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+        .tag-fe { background: #dbeafe; color: #1e40af; } /* Frontend */
+        .tag-be { background: #dcfce7; color: #166534; } /* Backend */
+        .tag-admin { background: #fce7f3; color: #9d174d; } /* Admin */
+
+        /* Tables */
+        table { width: 100%; border-collapse: collapse; margin-bottom: 2rem; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+        th, td { padding: 12px 16px; text-align: left; border-bottom: 1px solid #e2e8f0; }
+        th { background: #f1f5f9; font-weight: 600; color: #475569; font-size: 0.875rem; }
+        td { font-size: 0.9rem; }
+
+        /* Wireframe Container Styles */
+        .wireframe-box {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 30px 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: relative;
+            overflow: hidden; /* Prevents overflow */
+        }
+
+        .device-mockup {
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: #fff;
+            position: relative;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .device-mockup.mobile {
+            width: 100%;
+            max-width: 320px;
+            height: 600px;
+            margin: 0 auto;
+            border-width: 8px 4px;
+            border-color: #334155;
+            border-radius: 24px;
+        }
+
+        /* Fixed: Dynamic height for desktop mockups to prevent bleeding */
+        .device-mockup.desktop {
+            width: 100%;
+            min-height: 400px; /* Changed from fixed height */
+            height: auto;
+            border-top: 24px solid #f1f5f9; /* Browser bar simulation */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Scrollbar styling for wireframes */
+        .wf-scroll::-webkit-scrollbar { width: 6px; }
+        .wf-scroll::-webkit-scrollbar-track { background: #f1f1f1; }
+        .wf-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+
+        /* Interactive Elements in Wireframes */
+        .wf-btn { cursor: pointer; transition: all 0.2s; }
+        .wf-btn:active { transform: scale(0.95); }
+        .wf-input:focus { border-color: #3b82f6; outline: none; }
+        
+        .hidden-el { display: none !important; }
+
+        /* Admin Graph Bars Animation */
+        .graph-bar {
+            transition: height 1s ease-out;
+            height: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Content Centered -->
+    <main class="doc-container">
+        
+        <!-- Header -->
+        <header class="mb-16 border-b border-gray-200 pb-8">
+            <div class="flex flex-col md:flex-row justify-between items-end gap-4">
+                <div>
+                    <h1>Functional Specification</h1>
+                    <p class="text-gray-600 text-lg">Detailed requirements for the White Label Perfume E-commerce Platform.</p>
+                </div>
+                <div class="bg-gray-900 px-6 py-2 rounded text-white text-base font-bold font-mono whitespace-nowrap">
+                    v1
+                </div>
+            </div>
+            
+            <!-- Quick Links (Table of Contents replacement) -->
+            <div class="mt-10 flex flex-wrap gap-3 text-sm">
+                <a href="#intro" class="text-gray-500 hover:text-indigo-600 border px-3 py-1 rounded-full bg-white transition-colors">Overview</a>
+                <a href="#auth" class="text-gray-500 hover:text-indigo-600 border px-3 py-1 rounded-full bg-white transition-colors">Authentication</a>
+                <a href="#catalog" class="text-gray-500 hover:text-indigo-600 border px-3 py-1 rounded-full bg-white transition-colors">Catalog</a>
+                <a href="#checkout" class="text-gray-500 hover:text-indigo-600 border px-3 py-1 rounded-full bg-white transition-colors">Checkout</a>
+                <a href="#account" class="text-gray-500 hover:text-indigo-600 border px-3 py-1 rounded-full bg-white transition-colors">Dashboard</a>
+                <a href="#admin" class="text-gray-500 hover:text-indigo-600 border px-3 py-1 rounded-full bg-white transition-colors">Admin Panel</a>
+            </div>
+        </header>
+
+        <!-- Section 1: Introduction -->
+        <section id="intro">
+            <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                <h3 class="mt-0">Project Overview</h3>
+                <p>The objective is to build a scalable, high-performance e-commerce web application specialized for selling perfumes. The frontend will be a consumer-facing PWA (Progressive Web App), while the backend administration will be powered by Next.js for SSR capabilities and SEO management.</p>
+                
+                <div class="grid md:grid-cols-2 gap-6 mt-6">
+                    <div>
+                        <h4 class="font-bold text-sm uppercase text-gray-500 mb-2">Consumer App</h4>
+                        <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700">
+                            <li>Next.js PWA</li>
+                            <li>Tailwind CSS (Mobile First)</li>
+                            <li>OTP-based Login</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-sm uppercase text-gray-500 mb-2">Admin Platform</h4>
+                        <ul class="list-disc pl-5 space-y-1 text-sm text-gray-700">
+                            <li>Next.js Dashboard</li>
+                            <li>Inventory & Order Management</li>
+                            <li>Analytics & Reporting</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 2: Global UI -->
+        <section id="global-ui">
+            <h2>2. Global UI & Navigation</h2>
+            <p>The application must support global configurations for language and visual themes. Layouts must be responsive, collapsing to a hamburger menu on screens smaller than 768px.</p>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Feature</th>
+                        <th>Description</th>
+                        <th>Priority</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="req-tag tag-fe">FE-01</span></td>
+                        <td>Responsive Nav</td>
+                        <td>Mega-menu on Desktop, Sidebar Drawer on Mobile.</td>
+                        <td>High</td>
+                    </tr>
+                    <tr>
+                        <td><span class="req-tag tag-fe">FE-02</span></td>
+                        <td>Theme Selection</td>
+                        <td>Toggle between 'Light' (Day) and 'Dark' (Night) modes.</td>
+                        <td>Medium</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Wireframe: Global Nav -->
+            <div class="wireframe-box bg-gray-50">
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-xs font-bold text-gray-500 uppercase tracking-wider">Wireframe: Responsive Header</span>
+                    <button onclick="toggleWfTheme()" class="text-xs bg-white border border-gray-300 px-3 py-1 rounded hover:bg-gray-100">Test Theme</button>
+                </div>
+                
+                <!-- Mockup -->
+                <div id="wf-header-container" class="device-mockup desktop bg-white transition-colors duration-300" style="min-height: 250px; border-top: none;">
+                    
+                    <!-- Top Promo Banner -->
+                    <div class="bg-indigo-600 text-white text-xs py-1 text-center relative px-8" id="wf-promo">
+                        Summer Sale: Flat 50% Off on Musk Scents!
+                        <span class="absolute right-4 top-1 cursor-pointer" onclick="document.getElementById('wf-promo').style.display='none'">×</span>
+                    </div>
+
+                    <!-- Main Nav -->
+                    <div class="border-b border-gray-200 p-4 flex justify-between items-center bg-inherit text-inherit relative">
+                        <!-- Mobile Hamburger (Visible on small screens in wireframe) -->
+                        <div class="md:hidden text-lg cursor-pointer"><i class="fa-solid fa-bars"></i></div>
+
+                        <div class="font-serif text-xl italic font-bold">Essence.</div>
+                        
+                        <!-- Desktop Links -->
+                        <div class="hidden md:flex gap-6 text-sm font-medium">
+                            <a href="#" class="hover:text-indigo-500">Men</a>
+                            <a href="#" class="hover:text-indigo-500">Women</a>
+                            <a href="#" class="hover:text-indigo-500">Unisex</a>
+                            <a href="#" class="hover:text-indigo-500 text-red-500">Offers</a>
+                        </div>
+
+                        <div class="flex gap-4 text-sm items-center">
+                            <select class="bg-transparent border border-gray-300 rounded px-2 py-1 text-xs hidden md:block">
+                                <option>EN</option>
+                                <option>FR</option>
+                            </select>
+                            <i class="fa-solid fa-moon cursor-pointer hover:text-indigo-500" onclick="toggleWfTheme()"></i>
+                            <div class="relative">
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[9px] rounded-full w-4 h-4 flex items-center justify-center">2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Auth -->
+        <section id="auth">
+            <h2>3. Authentication (OTP Based)</h2>
+            <p>To reduce friction, the platform uses an email/SMS OTP logic rather than passwords.</p>
+
+            <div class="wireframe-box">
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-4">Wireframe: Mobile Login Flow</span>
+                
+                <div class="device-mockup mobile relative overflow-hidden bg-white">
+                    <!-- Status Bar -->
+                    <div class="h-6 bg-gray-100 flex justify-between px-4 items-center text-[10px] text-gray-500">
+                        <span>9:41</span>
+                        <span><i class="fa-solid fa-signal"></i> <i class="fa-solid fa-wifi"></i></span>
+                    </div>
+
+                    <!-- Login Screen -->
+                    <div class="p-6 h-full flex flex-col justify-center" id="wf-auth-screen-1">
+                        <h3 class="text-2xl font-serif font-bold mb-2">Welcome Back</h3>
+                        <p class="text-sm text-gray-500 mb-8">Enter your details to access your scent collection.</p>
+
+                        <label class="text-xs font-bold text-gray-600 mb-1">Email / Phone</label>
+                        <input type="text" placeholder="john@example.com" class="w-full border border-gray-300 rounded p-3 mb-4 text-sm focus:border-indigo-500 outline-none">
+                        
+                        <button onclick="simulateOTP()" class="w-full bg-black text-white py-3 rounded font-medium text-sm hover:bg-gray-800 transition-transform active:scale-95" id="wf-otp-btn">
+                            Get OTP
+                        </button>
+                    </div>
+
+                    <!-- OTP Screen (Hidden initially) -->
+                    <div class="p-6 h-full flex flex-col justify-center hidden-el" id="wf-auth-screen-2">
+                        <div onclick="resetAuth()" class="mb-6 text-gray-500 text-sm cursor-pointer"><i class="fa-solid fa-arrow-left"></i> Back</div>
+                        <h3 class="text-2xl font-serif font-bold mb-2">Verify OTP</h3>
+                        <p class="text-sm text-gray-500 mb-8">We sent a code to your device.</p>
+
+                        <div class="flex gap-2 justify-between mb-6">
+                            <input type="text" value="" class="w-12 h-12 border border-gray-300 rounded text-center text-xl focus:border-indigo-500 outline-none">
+                            <input type="text" value="" class="w-12 h-12 border border-gray-300 rounded text-center text-xl focus:border-indigo-500 outline-none">
+                            <input type="text" value="" class="w-12 h-12 border border-gray-300 rounded text-center text-xl focus:border-indigo-500 outline-none">
+                            <input type="text" value="" class="w-12 h-12 border border-gray-300 rounded text-center text-xl focus:border-indigo-500 outline-none">
+                        </div>
+                        
+                        <button onclick="finishAuth()" class="w-full bg-indigo-600 text-white py-3 rounded font-medium text-sm hover:bg-indigo-700">
+                            Verify & Login
+                        </button>
+                    </div>
+
+                    <!-- Success Screen -->
+                    <div class="p-6 h-full flex flex-col items-center justify-center hidden-el bg-green-50" id="wf-auth-screen-3">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center text-green-600 text-2xl mb-4">
+                            <i class="fa-solid fa-check"></i>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-800">Verified!</h3>
+                        <button onclick="resetAuth()" class="mt-8 text-xs underline text-gray-500">Restart Demo</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4: Catalog -->
+        <section id="catalog">
+            <h2>4. Product Listing & Search</h2>
+            <p>Responsive grid layout for products. Sidebar filters on desktop, bottom sheet filters on mobile. The grid automatically adjusts columns based on viewport width.</p>
+
+            <!-- Wireframe: Listing -->
+            <div class="wireframe-box">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xs font-bold text-gray-500 uppercase">Wireframe: Responsive Listing</span>
+                </div>
+
+                <!-- Increased min-height to prevent bleeding -->
+                <div class="device-mockup desktop bg-gray-50" style="min-height: 600px;">
+                    <div class="flex flex-col md:flex-row h-full flex-grow">
+                        <!-- Filters (Responsive: Sidebar on Desktop, Hidden/Modal on Mobile) -->
+                        <div class="w-full md:w-1/4 border-r border-gray-200 p-4 bg-white md:block hidden">
+                            <h4 class="text-xs font-bold uppercase mb-4 text-gray-400">Filters</h4>
+                            <div class="mb-4">
+                                <label class="text-xs font-semibold block mb-2">Category</label>
+                                <div class="space-y-1">
+                                    <div class="flex items-center text-xs"><input type="checkbox" class="mr-2"> Floral</div>
+                                    <div class="flex items-center text-xs"><input type="checkbox" class="mr-2"> Woody</div>
+                                    <div class="flex items-center text-xs"><input type="checkbox" class="mr-2"> Oriental</div>
+                                    <div class="flex items-center text-xs"><input type="checkbox" class="mr-2"> Fresh</div>
+                                </div>
+                            </div>
+                             <div class="mb-4">
+                                <label class="text-xs font-semibold block mb-2">Price Range</label>
+                                <input type="range" class="w-full">
+                            </div>
+                        </div>
+                        
+                        <!-- Mobile Filter Button (Visible only on mobile) -->
+                        <div class="md:hidden p-4 bg-white border-b flex justify-between items-center">
+                            <span class="font-serif font-bold">All Scents</span>
+                            <button class="text-xs border px-3 py-1 rounded bg-gray-100"><i class="fa-solid fa-filter"></i> Filters</button>
+                        </div>
+
+                        <!-- Product Grid -->
+                        <div class="w-full md:w-3/4 p-6 bg-gray-50">
+                            <div class="grid grid-cols-2 lg:grid-cols-3 gap-4">
+                                <!-- Product Card 1 -->
+                                <div class="group bg-white border border-gray-200 rounded-lg p-3 relative hover:shadow-lg transition-shadow">
+                                    <div class="absolute top-2 left-2 bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded font-bold">-20%</div>
+                                    <div class="aspect-square bg-gray-100 rounded mb-3 flex items-center justify-center text-gray-300">
+                                        <i class="fa-solid fa-spray-can text-2xl"></i>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-gray-800 truncate">Midnight Jasmine</h4>
+                                    <div class="flex justify-between items-center mt-2">
+                                        <span class="text-sm font-bold">$85.00</span>
+                                        <button class="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Product Card 2 -->
+                                <div class="group bg-white border border-gray-200 rounded-lg p-3 relative hover:shadow-lg transition-shadow">
+                                    <div class="aspect-square bg-gray-100 rounded mb-3 flex items-center justify-center text-gray-300">
+                                        <i class="fa-solid fa-bottle-droplet text-2xl"></i>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-gray-800 truncate">Ocean Breeze</h4>
+                                    <div class="flex justify-between items-center mt-2">
+                                        <span class="text-sm font-bold">$45.00</span>
+                                        <button class="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <!-- Product Card 3 -->
+                                <div class="group bg-white border border-gray-200 rounded-lg p-3 relative hover:shadow-lg transition-shadow">
+                                    <div class="aspect-square bg-gray-100 rounded mb-3 flex items-center justify-center text-gray-300">
+                                        <i class="fa-solid fa-flask text-2xl"></i>
+                                    </div>
+                                    <h4 class="text-sm font-bold text-gray-800 truncate">Royal Amber</h4>
+                                    <div class="flex justify-between items-center mt-2">
+                                        <span class="text-sm font-bold">$120.00</span>
+                                        <button class="bg-black text-white w-6 h-6 rounded-full flex items-center justify-center text-xs">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Checkout & Coupons -->
+        <section id="checkout">
+            <h2>5. Checkout & Coupons</h2>
+            <p>A streamlined checkout process containing address entry, order summary, and coupon application.</p>
+
+            <div class="wireframe-box">
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-4">Wireframe: Checkout & Coupons</span>
+                
+                <div class="device-mockup desktop bg-gray-50" style="min-height: 550px;">
+                    <div class="p-6 h-full flex-grow overflow-auto">
+                        <div class="max-w-4xl mx-auto flex flex-col lg:flex-row gap-8">
+                            
+                            <!-- Left Col: Shipping Info -->
+                            <div class="flex-1">
+                                <h3 class="text-lg font-bold mb-4 mt-0">Shipping Details</h3>
+                                <div class="space-y-3">
+                                    <input type="text" placeholder="Full Name" class="w-full p-2 border rounded text-sm bg-white">
+                                    <input type="text" placeholder="Address Line 1" class="w-full p-2 border rounded text-sm bg-white">
+                                    <div class="flex gap-2">
+                                        <input type="text" placeholder="City" class="w-1/2 p-2 border rounded text-sm bg-white">
+                                        <input type="text" placeholder="Zip Code" class="w-1/2 p-2 border rounded text-sm bg-white">
+                                    </div>
+                                </div>
+
+                                <h3 class="text-lg font-bold mb-4 mt-8">Payment Method</h3>
+                                <div class="border rounded p-3 bg-white flex items-center gap-3 cursor-pointer border-indigo-500 ring-1 ring-indigo-500">
+                                    <div class="w-4 h-4 rounded-full bg-indigo-600"></div>
+                                    <span class="text-sm font-bold">Credit Card</span>
+                                    <div class="ml-auto text-gray-400 text-xs flex gap-1">
+                                        <i class="fa-brands fa-cc-visa"></i>
+                                        <i class="fa-brands fa-cc-mastercard"></i>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Right Col: Order Summary & Coupons -->
+                            <div class="w-full lg:w-80 flex-shrink-0">
+                                <div class="bg-white p-4 rounded shadow-sm border">
+                                    <h4 class="text-sm font-bold uppercase text-gray-500 mb-4">Order Summary</h4>
+                                    
+                                    <!-- Cart Items -->
+                                    <div class="space-y-3 mb-4 border-b pb-4">
+                                        <div class="flex gap-3">
+                                            <div class="w-10 h-10 bg-gray-100 rounded"></div>
+                                            <div class="flex-1">
+                                                <div class="text-xs font-bold">Midnight Jasmine</div>
+                                                <div class="text-[10px] text-gray-500">Qty: 1</div>
+                                            </div>
+                                            <div class="text-xs font-bold">$85.00</div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Coupon Section -->
+                                    <div class="mb-4">
+                                        <label class="text-[10px] font-bold text-gray-500 uppercase mb-1 block">Promo Code</label>
+                                        <div class="flex gap-2">
+                                            <input type="text" id="coupon-input" placeholder="Enter code" class="flex-1 p-2 text-xs border border-dashed border-gray-400 rounded bg-gray-50 uppercase">
+                                            <button onclick="applyCoupon()" class="bg-black text-white px-3 py-1 text-xs rounded">Apply</button>
+                                        </div>
+                                        <div id="coupon-msg" class="hidden-el text-[10px] text-green-600 mt-1 font-bold">
+                                            <i class="fa-solid fa-check"></i> 'SAVE20' Applied!
+                                        </div>
+                                    </div>
+
+                                    <!-- Totals -->
+                                    <div class="space-y-1 text-xs text-gray-600">
+                                        <div class="flex justify-between"><span>Subtotal</span><span>$85.00</span></div>
+                                        <div class="flex justify-between"><span>Shipping</span><span>$5.00</span></div>
+                                        <div class="flex justify-between text-green-600 hidden-el" id="discount-row"><span>Discount (20%)</span><span>-$17.00</span></div>
+                                        <div class="flex justify-between font-bold text-base text-black mt-2 pt-2 border-t">
+                                            <span>Total</span>
+                                            <span id="final-total">$90.00</span>
+                                        </div>
+                                    </div>
+
+                                    <button class="w-full bg-indigo-600 text-white py-3 rounded mt-6 text-sm font-bold hover:bg-indigo-700">Place Order</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 6: User Dashboard -->
+        <section id="account">
+            <h2>6. User Dashboard & Reviews</h2>
+            <p>Users can view order history and leave reviews (Rating + Comment) for purchased items.</p>
+
+            <div class="wireframe-box">
+                <span class="text-xs font-bold text-gray-500 uppercase tracking-wider block mb-4">Wireframe: Customer Dashboard</span>
+                
+                <!-- Increased min-height to allow content to flow without bleeding -->
+                <div class="device-mockup desktop bg-white" style="min-height: 600px;">
+                    <div class="flex flex-col md:flex-row h-full flex-grow">
+                        <!-- Dashboard Sidebar -->
+                        <div class="w-full md:w-64 bg-gray-50 p-6 border-r flex-shrink-0">
+                            <div class="flex items-center gap-3 mb-8">
+                                <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
+                                <div>
+                                    <div class="text-sm font-bold">John Doe</div>
+                                    <div class="text-xs text-gray-500">Gold Member</div>
+                                </div>
+                            </div>
+                            <nav class="space-y-1 text-sm">
+                                <a href="#" class="block p-2 bg-indigo-50 text-indigo-700 rounded font-medium">My Orders</a>
+                                <a href="#" class="block p-2 text-gray-600 hover:bg-gray-100 rounded">Wishlist</a>
+                                <a href="#" class="block p-2 text-gray-600 hover:bg-gray-100 rounded">Addresses</a>
+                            </nav>
+                        </div>
+
+                        <!-- Main Dashboard Content -->
+                        <div class="flex-1 p-6 overflow-y-auto">
+                            <h3 class="text-xl font-bold mb-4 mt-0">My Orders</h3>
+                            
+                            <!-- Order Item 1 -->
+                            <div class="border rounded-lg p-4 mb-4">
+                                <div class="flex justify-between items-start mb-3 border-b pb-3">
+                                    <div>
+                                        <span class="text-xs text-gray-500 block">Order #10234</span>
+                                        <span class="text-xs font-bold text-green-600">Delivered on Dec 12</span>
+                                    </div>
+                                    <button class="text-xs border border-gray-300 px-3 py-1 rounded">View Invoice</button>
+                                </div>
+
+                                <div class="flex gap-4 items-center">
+                                    <div class="w-12 h-12 bg-gray-100 rounded flex-shrink-0"></div>
+                                    <div class="flex-1">
+                                        <h4 class="text-sm font-bold">Royal Oud 100ml</h4>
+                                        <p class="text-xs text-gray-500">Qty: 1 • $120.00</p>
+                                    </div>
+                                    <button onclick="toggleReviewForm(this)" class="text-xs bg-black text-white px-3 py-1.5 rounded">Write Review</button>
+                                </div>
+
+                                <!-- Inline Review Form (Hidden) -->
+                                <div class="review-form hidden-el mt-4 bg-gray-50 p-4 rounded border">
+                                    <h5 class="text-sm font-bold mb-2">Rate this product</h5>
+                                    <div class="flex gap-1 text-gray-300 mb-3 text-lg cursor-pointer">
+                                        <i class="fa-solid fa-star hover:text-yellow-400 text-yellow-400"></i>
+                                        <i class="fa-solid fa-star hover:text-yellow-400 text-yellow-400"></i>
+                                        <i class="fa-solid fa-star hover:text-yellow-400 text-yellow-400"></i>
+                                        <i class="fa-solid fa-star hover:text-yellow-400 text-yellow-400"></i>
+                                        <i class="fa-solid fa-star hover:text-yellow-400"></i>
+                                    </div>
+                                    <textarea class="w-full border rounded p-2 text-sm h-20 mb-2" placeholder="Tell us what you liked..."></textarea>
+                                    <button onclick="this.parentElement.innerHTML = '<span class=\'text-green-600 text-sm font-bold\'><i class=\'fa-solid fa-check\'></i> Submitted for approval</span>'" class="bg-indigo-600 text-white px-4 py-1 rounded text-xs">Submit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 7: Admin Panel -->
+        <section id="admin">
+            <h2>7. Admin Panel (Next.js)</h2>
+            <p>The Admin Panel is the control center for the application. It features a comprehensive dashboard with real-time metrics and a detailed product management interface.</p>
+
+            <!-- Wireframe: Admin Dashboard Overview (NEW) -->
+            <div class="wireframe-box bg-slate-900 p-0 border-none mb-8">
+                <div class="flex justify-between items-center p-4 border-b border-slate-700">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Wireframe: Admin Dashboard Metrics</span>
+                    <button onclick="animateGraph()" class="text-xs bg-slate-700 text-slate-200 px-2 py-1 rounded hover:bg-slate-600">Simulate Live Data</button>
+                </div>
+
+                <div class="flex flex-col md:flex-row min-h-[500px] text-slate-300 font-sans">
+                    <!-- Admin Sidebar -->
+                    <div class="w-full md:w-64 bg-slate-950 flex-shrink-0 md:flex flex-col border-r border-slate-800 hidden">
+                        <div class="p-4 border-b border-slate-800 text-white font-bold">Admin<span class="text-indigo-500">Panel</span></div>
+                        <nav class="flex-1 p-4 space-y-2 text-sm">
+                            <a href="#" class="block px-3 py-2 rounded bg-indigo-600 text-white">Overview</a>
+                            <a href="#" class="block px-3 py-2 rounded hover:bg-slate-800">Products</a>
+                            <a href="#" class="block px-3 py-2 rounded hover:bg-slate-800">Orders</a>
+                        </nav>
+                    </div>
+
+                    <!-- Dashboard Content -->
+                    <div class="flex-1 p-6 overflow-y-auto">
+                        <!-- Key Metrics Grid -->
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                            <!-- Metric 1 -->
+                            <div class="bg-slate-800 p-4 rounded border border-slate-700">
+                                <div class="text-xs text-slate-400 uppercase tracking-wide">Total Sales</div>
+                                <div class="text-2xl text-white font-bold mt-1">$45,200</div>
+                                <div class="text-[10px] text-green-400 mt-1"><i class="fa-solid fa-arrow-up"></i> +12% this week</div>
+                            </div>
+                            <!-- Metric 2 -->
+                            <div class="bg-slate-800 p-4 rounded border border-slate-700">
+                                <div class="text-xs text-slate-400 uppercase tracking-wide">Active Orders</div>
+                                <div class="text-2xl text-white font-bold mt-1">128</div>
+                                <div class="text-[10px] text-yellow-400 mt-1">15 Pending Ship</div>
+                            </div>
+                             <!-- Metric 3 -->
+                            <div class="bg-slate-800 p-4 rounded border border-slate-700">
+                                <div class="text-xs text-slate-400 uppercase tracking-wide">Total Users</div>
+                                <div class="text-2xl text-white font-bold mt-1">3,405</div>
+                                <div class="text-[10px] text-green-400 mt-1"><i class="fa-solid fa-user-plus"></i> +40 new</div>
+                            </div>
+                             <!-- Metric 4 -->
+                            <div class="bg-slate-800 p-4 rounded border border-slate-700">
+                                <div class="text-xs text-slate-400 uppercase tracking-wide">Low Stock</div>
+                                <div class="text-2xl text-white font-bold mt-1">5</div>
+                                <div class="text-[10px] text-red-400 mt-1">Needs Attention</div>
+                            </div>
+                        </div>
+
+                        <!-- Graph & Recent Activity -->
+                        <div class="grid md:grid-cols-3 gap-6">
+                            <!-- Revenue Graph Placeholder -->
+                            <div class="md:col-span-2 bg-slate-800 p-5 rounded border border-slate-700 min-h-[250px] relative">
+                                <h4 class="text-white text-sm font-bold mb-6">Revenue Analytics (Last 7 Days)</h4>
+                                <div class="flex justify-between items-end h-32 px-4 gap-2" id="admin-graph">
+                                    <div class="w-full bg-indigo-500/30 rounded-t relative group">
+                                        <div class="absolute bottom-0 w-full bg-indigo-500 rounded-t graph-bar" style="height: 40%"></div>
+                                    </div>
+                                    <div class="w-full bg-indigo-500/30 rounded-t relative">
+                                        <div class="absolute bottom-0 w-full bg-indigo-500 rounded-t graph-bar" style="height: 65%"></div>
+                                    </div>
+                                    <div class="w-full bg-indigo-500/30 rounded-t relative">
+                                        <div class="absolute bottom-0 w-full bg-indigo-500 rounded-t graph-bar" style="height: 35%"></div>
+                                    </div>
+                                    <div class="w-full bg-indigo-500/30 rounded-t relative">
+                                        <div class="absolute bottom-0 w-full bg-indigo-500 rounded-t graph-bar" style="height: 85%"></div>
+                                    </div>
+                                    <div class="w-full bg-indigo-500/30 rounded-t relative">
+                                        <div class="absolute bottom-0 w-full bg-indigo-500 rounded-t graph-bar" style="height: 50%"></div>
+                                    </div>
+                                    <div class="w-full bg-indigo-500/30 rounded-t relative">
+                                        <div class="absolute bottom-0 w-full bg-indigo-500 rounded-t graph-bar" style="height: 90%"></div>
+                                    </div>
+                                    <div class="w-full bg-indigo-500/30 rounded-t relative">
+                                        <div class="absolute bottom-0 w-full bg-indigo-500 rounded-t graph-bar" style="height: 75%"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Recent Activity -->
+                            <div class="bg-slate-800 p-5 rounded border border-slate-700">
+                                <h4 class="text-white text-sm font-bold mb-4">Recent Activity</h4>
+                                <div class="space-y-4">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-green-500/20 text-green-400 flex items-center justify-center text-xs"><i class="fa-solid fa-cart-shopping"></i></div>
+                                        <div>
+                                            <div class="text-xs text-white font-medium">New Order #1024</div>
+                                            <div class="text-[10px] text-slate-500">2 mins ago</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center text-xs"><i class="fa-solid fa-user"></i></div>
+                                        <div>
+                                            <div class="text-xs text-white font-medium">User Registration</div>
+                                            <div class="text-[10px] text-slate-500">15 mins ago</div>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-yellow-500/20 text-yellow-400 flex items-center justify-center text-xs"><i class="fa-solid fa-star"></i></div>
+                                        <div>
+                                            <div class="text-xs text-white font-medium">New Review (4.5)</div>
+                                            <div class="text-[10px] text-slate-500">1 hour ago</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wireframe: Add Product + Offer -->
+            <div class="wireframe-box bg-slate-800 p-0 border-none">
+                <div class="flex justify-between items-center p-4 border-b border-slate-700">
+                    <span class="text-xs font-bold text-slate-400 uppercase">Wireframe: Add Product & Offers</span>
+                </div>
+
+                <div class="flex flex-col md:flex-row min-h-[600px] text-slate-300 font-sans">
+                    
+                    <!-- Admin Sidebar (Replicated for consistency) -->
+                    <div class="w-full md:w-64 bg-slate-950 flex-shrink-0 md:flex flex-col border-r border-slate-700 hidden">
+                        <div class="p-4 border-b border-slate-700 text-white font-bold">Admin<span class="text-indigo-500">Panel</span></div>
+                        <nav class="flex-1 p-4 space-y-2 text-sm">
+                            <a href="#" class="block px-3 py-2 rounded hover:bg-slate-800">Overview</a>
+                            <a href="#" class="block px-3 py-2 rounded bg-indigo-600 text-white">Add Product</a>
+                            <a href="#" class="block px-3 py-2 rounded hover:bg-slate-800">Orders</a>
+                        </nav>
+                    </div>
+
+                    <!-- Admin Content -->
+                    <div class="flex-1 bg-slate-800 flex flex-col wf-scroll overflow-y-auto">
+                        <div class="p-8">
+                            <div class="flex justify-between items-center mb-6">
+                                <h2 class="text-xl text-white font-bold m-0 border-none p-0">Add New Product</h2>
+                                <div class="space-x-2">
+                                    <button class="bg-transparent border border-slate-600 text-slate-300 px-3 py-1.5 rounded text-xs">Cancel</button>
+                                    <button class="bg-green-600 text-white px-3 py-1.5 rounded text-xs">Save Product</button>
+                                </div>
+                            </div>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                <!-- Left: Basic Info -->
+                                <div class="lg:col-span-2 space-y-6">
+                                    <div class="bg-slate-700 p-5 rounded border border-slate-600">
+                                        <h4 class="text-white text-sm font-bold mb-4">Basic Information</h4>
+                                        <div class="space-y-4">
+                                            <div>
+                                                <label class="block text-xs text-slate-400 mb-1">Product Name</label>
+                                                <input type="text" class="w-full bg-slate-800 border border-slate-600 rounded p-2 text-sm text-white focus:border-indigo-500 outline-none">
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs text-slate-400 mb-1">Description</label>
+                                                <textarea class="w-full bg-slate-800 border border-slate-600 rounded p-2 text-sm text-white h-24"></textarea>
+                                            </div>
+                                            <div class="grid grid-cols-2 gap-4">
+                                                <div>
+                                                    <label class="block text-xs text-slate-400 mb-1">Base Price ($)</label>
+                                                    <input type="number" class="w-full bg-slate-800 border border-slate-600 rounded p-2 text-sm text-white">
+                                                </div>
+                                                <div>
+                                                    <label class="block text-xs text-slate-400 mb-1">Stock Quantity</label>
+                                                    <input type="number" class="w-full bg-slate-800 border border-slate-600 rounded p-2 text-sm text-white">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Offers Section -->
+                                    <div class="bg-slate-700 p-5 rounded border border-indigo-500/50 relative overflow-hidden">
+                                        <div class="absolute top-0 right-0 bg-indigo-600 text-white text-[10px] px-2 py-1">Offers Module</div>
+                                        <h4 class="text-white text-sm font-bold mb-4">Discount & Offers</h4>
+                                        
+                                        <div class="flex items-center mb-4">
+                                            <input type="checkbox" id="offer-toggle" class="w-4 h-4 rounded bg-slate-800 border-slate-600" checked>
+                                            <label for="offer-toggle" class="ml-2 text-sm text-white">Enable Promotional Offer</label>
+                                        </div>
+
+                                        <div class="grid grid-cols-2 gap-4">
+                                            <div>
+                                                <label class="block text-xs text-slate-400 mb-1">Discount Type</label>
+                                                <select class="w-full bg-slate-800 border border-slate-600 rounded p-2 text-sm text-white">
+                                                    <option>Percentage (%)</option>
+                                                    <option>Fixed Amount ($)</option>
+                                                </select>
+                                            </div>
+                                            <div>
+                                                <label class="block text-xs text-slate-400 mb-1">Value</label>
+                                                <input type="number" value="20" class="w-full bg-slate-800 border border-slate-600 rounded p-2 text-sm text-white">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Right: Images -->
+                                <div class="bg-slate-700 p-5 rounded border border-slate-600 h-fit">
+                                    <h4 class="text-white text-sm font-bold mb-4">Media</h4>
+                                    <div class="border-2 border-dashed border-slate-500 rounded-lg p-6 flex flex-col items-center justify-center text-slate-400 hover:border-indigo-500 hover:bg-slate-800 transition-colors cursor-pointer">
+                                        <i class="fa-solid fa-cloud-arrow-up text-2xl mb-2"></i>
+                                        <span class="text-xs text-center">Click to upload images</span>
+                                    </div>
+                                    <div class="grid grid-cols-3 gap-2 mt-4">
+                                        <div class="bg-slate-800 h-16 rounded border border-slate-600"></div>
+                                        <div class="bg-slate-800 h-16 rounded border border-slate-600"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="mt-20 pt-10 border-t border-gray-200 text-center">
+            <p class="text-red-600 font-bold uppercase tracking-widest text-sm">CONFIDENTIAL</p>
+        </footer>
+
+    </main>
+
+    <!-- Interactive Scripts for Wireframes -->
+    <script>
+        // Smooth Scrolling for quick links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Wireframe 1: Theme Toggle
+        let isDark = false;
+        function toggleWfTheme() {
+            const container = document.getElementById('wf-header-container');
+            isDark = !isDark;
+            if (isDark) {
+                container.classList.remove('bg-white', 'text-inherit');
+                container.classList.add('bg-gray-900', 'text-white');
+            } else {
+                container.classList.add('bg-white', 'text-inherit');
+                container.classList.remove('bg-gray-900', 'text-white');
+            }
+        }
+
+        // Wireframe 2: Auth
+        function simulateOTP() {
+            const btn = document.getElementById('wf-otp-btn');
+            const originalText = btn.innerText;
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Sending...';
+            setTimeout(() => {
+                document.getElementById('wf-auth-screen-1').classList.add('hidden-el');
+                document.getElementById('wf-auth-screen-2').classList.remove('hidden-el');
+                btn.innerText = originalText;
+            }, 1000);
+        }
+        function finishAuth() {
+            document.getElementById('wf-auth-screen-2').classList.add('hidden-el');
+            document.getElementById('wf-auth-screen-3').classList.remove('hidden-el');
+        }
+        function resetAuth() {
+            document.getElementById('wf-auth-screen-3').classList.add('hidden-el');
+            document.getElementById('wf-auth-screen-1').classList.remove('hidden-el');
+        }
+
+        // Wireframe 5: Coupon
+        function applyCoupon() {
+            const input = document.getElementById('coupon-input');
+            const msg = document.getElementById('coupon-msg');
+            const discountRow = document.getElementById('discount-row');
+            const total = document.getElementById('final-total');
+
+            if(input.value.toUpperCase() === 'SAVE20') {
+                msg.classList.remove('hidden-el');
+                discountRow.classList.remove('hidden-el');
+                total.innerText = "$73.00";
+                input.classList.add('border-green-500', 'text-green-600');
+            } else {
+                alert("Try code 'SAVE20'");
+            }
+        }
+
+        // Wireframe 6: Review Toggle
+        function toggleReviewForm(btn) {
+            const form = btn.parentElement.parentElement.querySelector('.review-form');
+            form.classList.toggle('hidden-el');
+        }
+
+        // Admin Dashboard Graph Animation
+        function animateGraph() {
+            const bars = document.querySelectorAll('.graph-bar');
+            bars.forEach(bar => {
+                // Reset height
+                bar.style.height = '0%';
+                // Force reflow
+                void bar.offsetWidth; 
+                // Set random height
+                const randomHeight = Math.floor(Math.random() * 80) + 20 + '%';
+                bar.style.height = randomHeight;
+            });
+        }
+        
+        // Run graph animation on load
+        setTimeout(animateGraph, 500);
+
+    </script>
+</body>
+</html>
